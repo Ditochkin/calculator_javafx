@@ -14,6 +14,13 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class Calculator extends Application {
+    private enum Operation {
+        ADD, SUB, MUL, DIV, EQ
+    }
+
+    private Double curDig;
+    Operation curOper = Operation.EQ;
+
     private Button shortButton(String nameBtn)
     {
         Button btn = new Button(nameBtn);
@@ -32,10 +39,57 @@ public class Calculator extends Application {
         return btn;
     }
 
-    private void AlexeyButton(Button btn)
+    private void setDigitAction(Button btn, Label text, String dig)
     {
-        btn.setMinWidth(12);
-        btn.setMinHeight(12);
+        btn.setOnAction( event -> {
+            text.setText(text.getText() + dig);
+        });
+    }
+
+    private void equalAction(Label text)
+    {
+        if (text.getText().isEmpty())
+        {
+            return;
+        }
+
+        Double result = 0.0;
+        System.out.print("Equal\n");
+        System.out.print(curDig);
+        System.out.print("\n");
+        System.out.print(text.getText());
+        System.out.print("\n");
+        System.out.print(curDig + Integer.parseInt(text.getText()));
+        System.out.print("\n");
+
+        switch (curOper)
+        {
+            case SUB:
+                result = curDig - Double.parseDouble(text.getText());
+                break;
+            case DIV:
+                result = curDig / Double.parseDouble(text.getText());
+                break;
+            case MUL:
+                result = curDig * Double.parseDouble(text.getText());
+                break;
+            case ADD:
+                result = curDig + Double.parseDouble(text.getText());
+                break;
+            case EQ:
+                return;
+        }
+
+        curOper = Operation.EQ;
+        curDig = result;
+
+        if (curDig == Math.round(curDig))
+        {
+            text.setText(Math.round(curDig) + "");
+            return;
+        }
+
+        text.setText(curDig + "");
     }
 
     @Override
@@ -78,6 +132,65 @@ public class Calculator extends Application {
         text.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1))));
         text.setMinWidth(button1.getMinWidth() * 4 + marg * 3);
         text.setMinHeight(65);
+
+        setDigitAction(button0, text, "0");
+        setDigitAction(button1, text, "1");
+        setDigitAction(button2, text, "2");
+        setDigitAction(button3, text, "3");
+        setDigitAction(button4, text, "4");
+        setDigitAction(button5, text, "5");
+        setDigitAction(button6, text, "6");
+        setDigitAction(button7, text, "7");
+        setDigitAction(button8, text, "8");
+        setDigitAction(button9, text, "9");
+
+        buttonPlus.setOnAction( event -> {
+            if (curOper != Operation.EQ)
+            {
+                equalAction(text);
+            }
+
+            curDig = Double.parseDouble(text.getText());
+            curOper = Operation.ADD;
+            text.setText("");
+        });
+
+        buttonMinus.setOnAction( event -> {
+            if (curOper != Operation.EQ)
+            {
+                equalAction(text);
+            }
+
+            curDig = Double.parseDouble(text.getText());
+            curOper = Operation.SUB;
+            text.setText("");
+        });
+
+        buttonMul.setOnAction( event -> {
+            if (curOper != Operation.EQ)
+            {
+                equalAction(text);
+            }
+
+            curDig = Double.parseDouble(text.getText());
+            curOper = Operation.MUL;
+            text.setText("");
+        });
+
+        buttonDiv.setOnAction( event -> {
+            if (curOper != Operation.EQ)
+            {
+                equalAction(text);
+            }
+
+            curDig = Double.parseDouble(text.getText());
+            curOper = Operation.DIV;
+            text.setText("");
+        });
+
+        buttonEq.setOnAction(event -> {
+            equalAction(text);
+        });
 
         VBox root = new VBox(marg);
         root.setAlignment(Pos.CENTER);
