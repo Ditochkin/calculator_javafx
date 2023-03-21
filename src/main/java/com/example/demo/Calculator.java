@@ -5,6 +5,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -140,7 +141,7 @@ public class Calculator extends Application {
         text.setMinWidth(button1.getMinWidth() * 4 + marg * 3);
         text.setMinHeight(65);
         text.setFont(new Font(23));
-        text.setTextAlignment(TextAlignment.RIGHT);
+        text.setAlignment(Pos.CENTER_RIGHT);
 
         button0.setOnAction( event -> {
             if (text.getText().startsWith("0") && text.getText().length() == 1)
