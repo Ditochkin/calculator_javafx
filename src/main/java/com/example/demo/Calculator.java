@@ -9,6 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -42,6 +43,12 @@ public class Calculator extends Application {
     private void setDigitAction(Button btn, Label text, String dig)
     {
         btn.setOnAction( event -> {
+            if (text.getText().startsWith("0") && text.getText().length() == 1)
+            {
+                text.setText(dig);
+                return;
+            }
+
             text.setText(text.getText() + dig);
         });
     }
@@ -132,8 +139,18 @@ public class Calculator extends Application {
         text.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1))));
         text.setMinWidth(button1.getMinWidth() * 4 + marg * 3);
         text.setMinHeight(65);
+        text.setFont(new Font(23));
+        text.setTextAlignment(TextAlignment.RIGHT);
 
-        setDigitAction(button0, text, "0");
+        button0.setOnAction( event -> {
+            if (text.getText().startsWith("0") && text.getText().length() == 1)
+            {
+                return;
+            }
+
+            text.setText(text.getText() + "0");
+        });
+
         setDigitAction(button1, text, "1");
         setDigitAction(button2, text, "2");
         setDigitAction(button3, text, "3");
